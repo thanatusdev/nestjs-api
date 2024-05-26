@@ -20,8 +20,9 @@ describe('TaskController (e2e)', () => {
     await app.init();
   });
 
-  afterAll(async () => {
+  afterAll(async (done) => {
     await app.close();
+    done();
   });
 
   it('Create a schedule to use its id or get the first one', () => {
