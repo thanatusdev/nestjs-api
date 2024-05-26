@@ -31,27 +31,27 @@ describe('TaskController (e2e)', () => {
       startTime: '2021-01-01T00:00:00Z',
       endTime: '2021-01-01T01:00:00Z',
     };
-    return request(app.getHttpServer())
-      .get('/schedules')
-      .expect(200)
-      .expect((res) => {
-        if (res.body.data.length === 0) {
-          return request(app.getHttpServer())
-            .post('/schedules')
-            .send(newSchedule)
-            .expect(201)
-            .expect((res) => {
-              expect(res.body).toBeInstanceOf(Object);
-              expect(res.body.data).toBeInstanceOf(Object);
-              expect(res.body.data.id).toBeDefined();
-              scheduleId = res.body.data.id;
-            });
-        } else {
-          scheduleId = res.body.data[0].id;
-        }
 
+    if (!scheduleId) {
+      return request(app.getHttpServer())
+        .get('/schedules')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toBeInstanceOf(Object);
+          expect(res.body.data).toBeInstanceOf(Array);
+          scheduleId = res.body?.data[0]?.id;
+        });
+    }
+
+    return request(app.getHttpServer())
+      .post('/schedules')
+      .send(newSchedule)
+      .expect(201)
+      .expect((res) => {
         expect(res.body).toBeInstanceOf(Object);
-        expect(res.body.data).toBeInstanceOf(Array);
+        expect(res.body.data).toBeInstanceOf(Object);
+        expect(res.body.data.id).toBeDefined();
+        scheduleId = res.body.data.id;
       });
   });
 
