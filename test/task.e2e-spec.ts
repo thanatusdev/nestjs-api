@@ -20,9 +20,8 @@ describe('TaskController (e2e)', () => {
     await app.init();
   });
 
-  afterAll(async (done) => {
+  afterAll(async () => {
     await app.close();
-    done();
   });
 
   it('Create a schedule to use its id or get the first one', () => {
@@ -37,7 +36,7 @@ describe('TaskController (e2e)', () => {
       .expect(200)
       .expect((res) => {
         if (res.body.data.length === 0) {
-          request(app.getHttpServer())
+          return request(app.getHttpServer())
             .post('/schedules')
             .send(newSchedule)
             .expect(201)
@@ -50,6 +49,9 @@ describe('TaskController (e2e)', () => {
         } else {
           scheduleId = res.body.data[0].id;
         }
+
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body.data).toBeInstanceOf(Array);
       });
   });
 
