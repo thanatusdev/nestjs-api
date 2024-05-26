@@ -48,4 +48,8 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
           REDIS_URL: redis://localhost:6379
-        run: pnpm test:e2e
+          NODE_ENV: test
+        run: |
+          pnpm prisma migrate deploy
+          pnpm prisma generate
+          pnpm test:e2e
