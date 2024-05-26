@@ -20,6 +20,10 @@ describe('TaskController (e2e)', () => {
     await app.init();
   });
 
+  afterAll(async () => {
+    await app.close();
+  });
+
   it('Create a schedule to use its id or get the first one', () => {
     const newSchedule: CreateScheduleDto = {
       accountId: 1,
